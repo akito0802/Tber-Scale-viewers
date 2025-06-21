@@ -162,7 +162,30 @@
     }
 
     /* --------- 画像を切り替え --------- */
+    
     function updateImage() {
+      const key   = keySelect.value;
+      const genre = genreSelect.value;
+      const scale = scaleSelect.value;
+      const fk    = filenameKeyMap[key];
+
+      let fname = "";
+      if (genre === "major") {
+        if      (scale === "メジャー") fname = `${fk}_メジャー_fretboard.png`;
+        else if (scale === "ペンタ")   fname = `${fk}_Mペンタ_fretboard.png`;
+        else if (scale === "ブルース") fname = `${fk}_Mブルース_fretboard.png`;
+      } else if (genre === "minor") {
+        if      (scale === "ナチュラル") fname = `${fk}_ナチュラル_fretboard.png`;
+        else if (scale === "ハーモニック") fname = `${fk}_ハーモニック_fretboard.png`;
+        else if (scale === "メロディック") fname = `${fk}_メロディック_fretboard.png`;
+        else if (scale === "ペンタ")     fname = `${fk}_mペンタ_fretboard.png`;
+        else if (scale === "ブルース")   fname = `${fk}_mブルース_fretboard.png`;
+      } else if (genre === "mode") {
+        fname = `${fk}_${scale}_fretboard.png`;
+      }
+      fretboardImg.src = fname;
+    }
+
       const key   = keySelect.value;
       const genre = genreSelect.value;
       const scale = scaleSelect.value;
