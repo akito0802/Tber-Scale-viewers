@@ -75,20 +75,15 @@
       mode: ["アイオニアン", "ドリアン", "フリジアン", "リディアン", "ミクソリディアン", "エオリアン", "ロクリアン"]
     };
 
+    const filenameKeyMap = {
+      "C": "c", "C#": "c_sharp", "D": "d", "D#": "d_sharp", "E": "e",
+      "F": "f", "F#": "f_sharp", "G": "g", "G#": "g_sharp", "A": "a",
+      "A#": "a_sharp", "B": "b"
+    };
+
     const scaleNotesMap = {
-  "C": ["C, D, E, F, G, A, B"],
-  "C#": ["C♯, D♯, F, F♯, G♯, A♯, C"],
-  "D": ["D, E, F♯, G, A, B, C♯"],
-  "D#": ["D♯, F, G, G♯, A♯, C, D"],
-  "E": ["E, F♯, G♯, A, B, C♯, D♯"],
-  "F": ["F, G, A, A♯, C, D, E"],
-  "F#": ["F♯, G♯, A♯, B, C♯, D♯, F"],
-  "G": ["G, A, B, C, D, E, F♯"],
-  "G#": ["G♯, A♯, C, C♯, D♯, F, G"],
-  "A": ["A, B, C♯, D, E, F♯, G♯"],
-  "A#": ["A♯, C, D, D♯, F, G, A"],
-  "B": ["B, C♯, D♯, E, F♯, G♯, A♯"]
-};
+      "C": ["C, D, E, F, G, A, B"], "C#": ["C♯, D♯, F, F♯, G♯, A♯, C"], "D": ["D, E, F♯, G, A, B, C♯"], "D#": ["D♯, F, G, G♯, A♯, C, D"], "E": ["E, F♯, G♯, A, B, C♯, D♯"], "F": ["F, G, A, A♯, C, D, E"], "F#": ["F♯, G♯, A♯, B, C♯, D♯, F"], "G": ["G, A, B, C, D, E, F♯"], "G#": ["G♯, A♯, C, C♯, D♯, F, G"], "A": ["A, B, C♯, D, E, F♯, G♯"], "A#": ["A♯, C, D, D♯, F, G, A"], "B": ["B, C♯, D♯, E, F♯, G♯, A♯"]
+    };
 
     function updateScales() {
       const selectedGenre = genreSelect.value;
@@ -104,8 +99,13 @@
     function updateImage() {
       const key = document.getElementById("key").value;
       const scale = scaleSelect.value;
-      const filename = `${filenameKeyMap[key]}_${scale}_fretboard.png`.replace(/ /g, "_");
-      fretboardImg.src = filename;
+      const filenameKey = filenameKeyMap[key];
+      if (scale === "メジャー") {
+        const filename = `${filenameKey}_メジャー_fretboard.png`;
+        fretboardImg.src = filename;
+      } else {
+        fretboardImg.src = "";
+      }
     }
 
     function updateNotes() {
@@ -122,21 +122,6 @@
     updateScales();
     updateImage();
     updateNotes();
-  
-const filenameKeyMap = {
-  "C": "c",
-  "C#": "c_sharp",
-  "D": "d",
-  "D#": "d_sharp",
-  "E": "e",
-  "F": "f",
-  "F#": "f_sharp",
-  "G": "g",
-  "G#": "g_sharp",
-  "A": "a",
-  "A#": "a_sharp",
-  "B": "b"
-};
-</script>
+  </script>
 </body>
 </html>
