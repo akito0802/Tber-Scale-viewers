@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tber Scales Viewer</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f0f0f0;
+      padding: 30px;
+      text-align: center;
+    }
+    .selector-box select {
+      padding: 10px 15px;
+      font-size: 1rem;
+      margin: 10px;
+    }
+    .section {
+      margin-top: 30px;
+      padding: 20px;
+      background: white;
+      display: inline-block;
+      border-radius: 10px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    }
+    .fretboard-img {
+      width: 70%;
+      height: auto;
+    }
+    .notes {
+      font-size: 1.4rem;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>Tber scales</h1>
+
+  <div class="selector-box">
+    <!-- Key -->
+    <select id="key" onchange="updateImage(); updateNotes();">
+      <option value="C">C</option><option value="C#">C#</option><option value="D">D</option><option value="D#">D#</option><option value="E">E</option><option value="F">F</option><option value="F#">F#</option><option value="G">G</option><option value="G#">G#</option><option value="A">A</option><option value="A#">A#</option><option value="B">B</option>
+    </select>
+
+    <!-- Genre -->
+    <select id="genre" onchange="updateScales(); updateImage(); updateNotes();">
+      <option value="major" selected>メジャー</option>
+      <option value="minor">マイナー</option>
+      <option value="mode">モード</option>
+    </select>
+
+    <!-- Scale (3つ目) -->
+    <select id="scale" onchange="updateImage(); updateNotes();">
+      <!-- JSで動的に挿入 -->
+    </select>
+  </div>
+
+  <div class="section">
+    <h2>構成音</h2>
+    <p class="notes" id="noteDisplay">C, D, E, F, G, A, B</p>
+  </div>
+
+  <div class="section">
+    <h2>指板</h2>
+    <img id="fretboard" src="c_メジャー_fretboard.png" alt="スケール指板画像" class="fretboard-img" />
+  </div>
+
+  <script>
+    const scales = {
+      major: ["メジャー", "ペンタ", "ブルース"],
+      minor: ["ナチュラル", "メロディック", "ハーモニック", "ペンタ", "ブルース"],
+      mode:  ["アイオニアン", "ドリアン", "フリジアン", "リディアン", "ミクソリディアン", "エオリアン", "ロクリアン"]
+    };
+
+    const filenameKeyMap = {
+      "C": "c", "C#": "c_sharp", "D": "d", "D#": "d_sharp", "E": "e",
+      "F": "f", "F#": "f_sharp", "G": "g", "G#": "g_sharp", "A": "a",
+      "A#": "a_sharp", "B": "b"
+    };
+
+    const scaleNotesMapMajor = {
+  "C": ["C, D, E, F, G, A, B"],
+  "C#": ["C♯, D♯, F, F♯, G♯, A♯, C"],
+  "D": ["D, E, F♯, G, A, B, C♯"],
+  "D#": ["D♯, F, G, G♯, A♯, C, D"],
+  "E": ["E, F♯, G♯, A, B, C♯, D♯"],
+  "F": ["F, G, A, A♯, C, D, E"],
+  "F#": ["F♯, G♯, A♯, B, C♯, D♯, F"],
+  "G": ["G, A, B, C, D, E, F♯"],
+  "G#": ["G♯, A♯, C, C♯, D♯, F, G"],
+  "A": ["A, B, C♯, D, E, F♯, G♯"],
+  "A#": ["A♯, C, D, D♯, F, G, A"],
+  "B": ["B, C♯, D♯, E, F♯, G♯, A♯"]
+};
+    const scaleNotesMapMinor = {
+  "C": ["C, D, D♯, F, G, G♯, A♯"],
+  "C#": ["C♯, D♯, E, F♯, G♯, A, B"],
+  "D": ["D, E, F, G, A, A♯, C"],
+  "D#": ["D♯, F, F♯, G♯, A♯, B, C♯"],
+  "E": ["E, F♯, G, A, B, C, D"],
+  "F": ["F, G, G♯, A♯, C, C♯, D♯"],
+  "F#": ["F♯, G♯, A, B, C♯, D, E"],
+  "G": ["G, A, A♯, C, D, D♯, F"],
+  "G#": ["G♯, A♯, B, C♯, D♯, E, F♯"],
+  "A": ["A, B, C, D, E, F, G"],
+  "A#": ["A♯, C, C♯, D♯, F, F♯, G♯"],
+  "B": ["B, C♯, D, E, F♯, G, A"]
+};
+    const scaleNotesMapMajorPenta = {
+  "C": ["C, D, E, G, A"],
+  "C#": ["C♯, D♯, F, G♯, A♯"],
+  "D": ["D, E, F♯, A, B"],
+  "D#": ["D♯, F, G, A♯, C"],
+  "E": ["E, F♯, G♯, B, C♯"],
+  "F": ["F, G, A, C, D"],
+  "F#": ["F♯, G♯, A♯, C♯, D♯"],
+  "G": ["G, A, B, D, E"],
+  "G#": ["G♯, A♯, C, D♯, F"],
+  "A": ["A, B, C♯, E, F♯"],
+  "A#": ["A♯, C, D, F, G"],
+  "B": ["B, C♯, D♯, F♯, G♯"]
+};
+    const scaleNotesMapMinorPenta = {
+  "C": ["C, D♯, F, G, A♯"],
+  "C#": ["C♯, E, F♯, G♯, B"],
+  "D": ["D, F, G, A, C"],
+  "D#": ["D♯, F♯, G♯, A♯, C♯"],
+  "E": ["E, G, A, B, D"],
+  "F": ["F, G♯, A♯, C, D♯"],
+  "F#": ["F♯, A, B, C♯, E"],
+  "G": ["G, A♯, C, D, F"],
+  "G#": ["G♯, B, C♯, D♯, F♯"],
+  "A": ["A, C, D, E, G"],
+  "A#": ["A♯, C♯, D♯, F, G♯"],
+  "B": ["B, D, E, F♯, A"]
+};
+
+    const keySelect   = document.getElementById("key");
+    const genreSelect = document.getElementById("genre");
+    const scaleSelect = document.getElementById("scale");
+    const fretboardImg = document.getElementById("fretboard");
+    const noteDisplay  = document.getElementById("noteDisplay");
+
+    function updateScales() {
+      const genre = genreSelect.value;
+      scaleSelect.innerHTML = "";
+      if (scales[genre]) {
+        scales[genre].forEach(scale => {
+          const opt = document.createElement("option");
+          opt.value = scale;
+          opt.textContent = scale;
+          scaleSelect.appendChild(opt);
+        });
+        scaleSelect.selectedIndex = 0;
+      }
+      updateImage();
+      updateNotes();
+    }
+
+    function updateImage() {
+      const key = keySelect.value;
+      const genre = genreSelect.value;
+      const scale = scaleSelect.value;
+      const fk = filenameKeyMap[key];
+      let fname = "";
+
+      if (genre === "major") {
+        if      (scale === "メジャー") fname = `${fk}_メジャー_fretboard.png`;
+        else if (scale === "ペンタ")   fname = `${fk}_Mペンタ_fretboard.png`;
+        else if (scale === "ブルース") fname = `${fk}_Mブルース_fretboard.png`;
+      } else if (genre === "minor") {
+        if      (scale === "ナチュラル")   fname = `${fk}_ナチュラル_fretboard.png`;
+        else if (scale === "メロディック") fname = `${fk}_メロディック_fretboard.png`;
+        else if (scale === "ハーモニック") fname = `${fk}_ハーモニック_fretboard.png`;
+        else if (scale === "ペンタ")       fname = `${fk}_mペンタ_fretboard.png`;
+        else if (scale === "ブルース")     fname = `${fk}_mブルース_fretboard.png`;
+      } else if (genre === "mode") {
+        fname = `${fk}_${scale}_fretboard.png`;
+      }
+
+      fretboardImg.src = fname || "";
+    }
+
+    function updateNotes() {
+      const key = keySelect.value;
+      const genre = genreSelect.value;
+      const scale = scaleSelect.value;
+      let notesArr = [];
+
+      if (genre === "major") {
+        if (scale === "メジャー") notesArr = scaleNotesMapMajor[key];
+        else if (scale === "ペンタ") notesArr = scaleNotesMapMajorPenta[key];
+      } else if (genre === "minor") {
+        if (scale === "ナチュラル") notesArr = scaleNotesMapMinor[key];
+        else if (scale === "ペンタ") notesArr = scaleNotesMapMinorPenta[key];
+      }
+
+      noteDisplay.textContent = notesArr.length ? notesArr.join(", ") : "（未対応）";
+    }
+
+    keySelect.addEventListener("change", () => {
+      updateImage();
+      updateNotes();
+    });
+    genreSelect.addEventListener("change", () => {
+      updateScales();
+    });
+    scaleSelect.addEventListener("change", () => {
+      updateImage();
+      updateNotes();
+    });
+
+    updateScales();
+</script>
+</body>
+</html>
