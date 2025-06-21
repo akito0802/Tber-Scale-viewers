@@ -1,63 +1,95 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tber Scales - Cメジャー</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tber Scales Viewer</title>
   <style>
     body {
       font-family: sans-serif;
       background: #f0f0f0;
+      padding: 30px;
       text-align: center;
-      padding: 20px;
     }
-    .selector-box {
-      margin-bottom: 20px;
-    }
-    select {
-      padding: 8px 12px;
-      margin: 0 5px;
+    .selector-box select {
+      padding: 10px 15px;
+      font-size: 1rem;
+      margin: 10px;
     }
     .section {
-      margin-top: 20px;
-      padding: 10px;
+      margin-top: 30px;
+      padding: 20px;
       background: white;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
       display: inline-block;
+      border-radius: 10px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
     }
     .fretboard-img {
-      width: 85%;
+      width: 70%;
       height: auto;
-    }
-    .notes {
-      font-size: 1.4rem;
-      font-weight: bold;
     }
   </style>
 </head>
 <body>
   <h1>Tber scales</h1>
+
   <div class="selector-box">
-    <select id="key">
-      <option selected>C</option>
+    <select id="key" onchange="updateImage()">
+      <option>C</option><option>C#</option><option>D</option><option>D#</option><option>E</option>
+      <option>F</option><option>F#</option><option>G</option><option>G#</option><option>A</option>
+      <option>A#</option><option>B</option>
     </select>
-    <select id="genre">
-      <option selected>メジャー</option>
+
+    <select id="genre" onchange="updateScales(); updateImage();">
+      <option value="major">メジャー</option>
+      <option value="minor">マイナー</option>
+      <option value="mode">モード</option>
     </select>
-    <select id="scale">
-      <option selected>メジャースケール</option>
+
+    <select id="scale" onchange="updateImage()">
+      <!-- 自動更新 -->
     </select>
   </div>
 
   <div class="section">
     <h2>指板</h2>
-    <img src="c_major_fretboard_between_frets.png" alt="Cメジャースケール指板" class="fretboard-img" />
+    <img id="fretboard" src="c_major_fretboard_between_frets.png" alt="スケール指板画像" class="fretboard-img" />
   </div>
 
-  <div class="section">
-    <h2>構成音</h2>
-    <p class="notes">C, D, E, F, G, A, B</p>
-  </div>
+  <script>
+    const scaleSelect = document.getElementById("scale");
+    const genreSelect = document.getElementById("genre");
+    const fretboardImg = document.getElementById("fretboard");
+
+    const scales = {
+      major: ["メジャー", "ペンタ", "ブルース"],
+      minor: ["ナチュラル", "メロディック", "ハーモニック", "ペンタ", "ブルース"],
+      mode: ["アイオニアン", "ドリアン", "フリジアン", "リディアン", "ミクソリディアン", "エオリアン", "ロクリアン"]
+    };
+
+    function updateScales() {
+      const selectedGenre = genreSelect.value;
+      scaleSelect.innerHTML = "";
+      scales[selectedGenre].forEach(scale => {
+        const opt = document.createElement("option");
+        opt.value = scale;
+        opt.textContent = scale;
+        scaleSelect.appendChild(opt);
+      });
+    }
+
+    function updateImage() {
+      const key = document.getElementById("key").value;
+      const genre = genreSelect.value;
+      const scale = scaleSelect.value;
+
+      // 仮の画像ファイル名の規則に基づく（実際は画像を揃える必要あり）
+      // 例: c_major_fretboard_between_frets.png
+      const filename = `${key.toLowerCase()}_${scale}_fretboard.png`.replace(/ /g, "_");
+      fretboardImg.src = filename;
+    }
+
+    updateScales();  // 初期化
+  </script>
 </body>
 </html>
