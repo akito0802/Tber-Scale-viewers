@@ -81,9 +81,24 @@
       "A#": "a_sharp", "B": "b"
     };
 
-    const scaleNotesMap = {
+    const scaleNotesMapMajor = {
       "C": ["C, D, E, F, G, A, B"], "C#": ["C♯, D♯, F, F♯, G♯, A♯, C"], "D": ["D, E, F♯, G, A, B, C♯"], "D#": ["D♯, F, G, G♯, A♯, C, D"], "E": ["E, F♯, G♯, A, B, C♯, D♯"], "F": ["F, G, A, A♯, C, D, E"], "F#": ["F♯, G♯, A♯, B, C♯, D♯, F"], "G": ["G, A, B, C, D, E, F♯"], "G#": ["G♯, A♯, C, C♯, D♯, F, G"], "A": ["A, B, C♯, D, E, F♯, G♯"], "A#": ["A♯, C, D, D♯, F, G, A"], "B": ["B, C♯, D♯, E, F♯, G♯, A♯"]
     };
+
+    const scaleNotesMapMinor = {
+  "C": ["C, D, D♯, F, G, G♯, A♯"],
+  "C#": ["C♯, D♯, E, F♯, G♯, A, B"],
+  "D": ["D, E, F, G, A, A♯, C"],
+  "D#": ["D♯, F, F♯, G♯, A♯, B, C♯"],
+  "E": ["E, F♯, G, A, B, C, D"],
+  "F": ["F, G, G♯, A♯, C, C♯, D♯"],
+  "F#": ["F♯, G♯, A, B, C♯, D, E"],
+  "G": ["G, A, A♯, C, D, D♯, F"],
+  "G#": ["G♯, A♯, B, C♯, D♯, E, F♯"],
+  "A": ["A, B, C, D, E, F, G"],
+  "A#": ["A♯, C, C♯, D♯, F, F♯, G♯"],
+  "B": ["B, C♯, D, E, F♯, G, A"]
+};
 
     function updateScales() {
       const selectedGenre = genreSelect.value;
@@ -99,10 +114,13 @@
     function updateImage() {
       const key = document.getElementById("key").value;
       const scale = scaleSelect.value;
+      const genre = genreSelect.value;
       const filenameKey = filenameKeyMap[key];
-      if (scale === "メジャー") {
-        const filename = `${filenameKey}_メジャー_fretboard.png`;
-        fretboardImg.src = filename;
+
+      if (genre === "major" && scale === "メジャー") {
+        fretboardImg.src = `${filenameKey}_メジャー_fretboard.png`;
+      } else if (genre === "minor" && scale === "ナチュラル") {
+        fretboardImg.src = `${filenameKey}_ナチュラル_fretboard.png`;
       } else {
         fretboardImg.src = "";
       }
@@ -112,14 +130,18 @@
       const key = document.getElementById("key").value;
       const genre = genreSelect.value;
       const scale = scaleSelect.value;
+
       if (genre === "major" && scale === "メジャー") {
-        noteDisplay.textContent = scaleNotesMap[key].join(", ");
+        noteDisplay.textContent = scaleNotesMapMajor[key].join(", ");
+      } else if (genre === "minor" && scale === "ナチュラル") {
+        noteDisplay.textContent = scaleNotesMapMinor[key].join(", ");
       } else {
         noteDisplay.textContent = "（未対応）";
       }
     }
 
     updateScales();
+    scaleSelect.value = "メジャー";
     updateImage();
     updateNotes();
   </script>
