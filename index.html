@@ -104,7 +104,7 @@
     function updateImage() {
       const key = document.getElementById("key").value;
       const scale = scaleSelect.value;
-      const filename = `${key.toLowerCase()}_${scale}_fretboard.png`.replace(/ /g, "_");
+      const filename = `${filenameKeyMap[key]}_${scale}_fretboard.png`.replace(/ /g, "_");
       fretboardImg.src = filename;
     }
 
@@ -122,6 +122,21 @@
     updateScales();
     updateImage();
     updateNotes();
-  </script>
+  
+const filenameKeyMap = {
+  "C": "c",
+  "C#": "c_sharp",
+  "D": "d",
+  "D#": "d_sharp",
+  "E": "e",
+  "F": "f",
+  "F#": "f_sharp",
+  "G": "g",
+  "G#": "g_sharp",
+  "A": "a",
+  "A#": "a_sharp",
+  "B": "b"
+};
+</script>
 </body>
 </html>
