@@ -118,8 +118,20 @@
       const filenameKey = filenameKeyMap[key];
 
       if (genre === "major" && scale === "メジャー") {
+        noteDisplay.textContent = scaleNotesMapMajor[key].join(", ");
+    } else if (genre === "major" && scale === "ペンタ") {
+        noteDisplay.textContent = scaleNotesMapMajorPenta[key].join(", ");
+        fretboardImg.src = `${filenameKey}_メジャー_fretboard.png`;
+    } else if (genre === "major" && scale === "ペンタ") {
+        fretboardImg.src = `${filenameKey}_ペンタ_fretboard.png`;
         fretboardImg.src = `${filenameKey}_メジャー_fretboard.png`;
       } else if (genre === "minor" && scale === "ナチュラル") {
+        noteDisplay.textContent = scaleNotesMapMinor[key].join(", ");
+    } else if (genre === "minor" && scale === "ペンタ") {
+        noteDisplay.textContent = scaleNotesMapMinorPenta[key].join(", ");
+        fretboardImg.src = `${filenameKey}_ナチュラル_fretboard.png`;
+    } else if (genre === "minor" && scale === "ペンタ") {
+        fretboardImg.src = `${filenameKey}_ペンタ_fretboard.png`;
         fretboardImg.src = `${filenameKey}_ナチュラル_fretboard.png`;
       } else {
         fretboardImg.src = "";
@@ -133,7 +145,19 @@
 
       if (genre === "major" && scale === "メジャー") {
         noteDisplay.textContent = scaleNotesMapMajor[key].join(", ");
+    } else if (genre === "major" && scale === "ペンタ") {
+        noteDisplay.textContent = scaleNotesMapMajorPenta[key].join(", ");
+        fretboardImg.src = `${filenameKey}_メジャー_fretboard.png`;
+    } else if (genre === "major" && scale === "ペンタ") {
+        fretboardImg.src = `${filenameKey}_ペンタ_fretboard.png`;
+        noteDisplay.textContent = scaleNotesMapMajor[key].join(", ");
       } else if (genre === "minor" && scale === "ナチュラル") {
+        noteDisplay.textContent = scaleNotesMapMinor[key].join(", ");
+    } else if (genre === "minor" && scale === "ペンタ") {
+        noteDisplay.textContent = scaleNotesMapMinorPenta[key].join(", ");
+        fretboardImg.src = `${filenameKey}_ナチュラル_fretboard.png`;
+    } else if (genre === "minor" && scale === "ペンタ") {
+        fretboardImg.src = `${filenameKey}_ペンタ_fretboard.png`;
         noteDisplay.textContent = scaleNotesMapMinor[key].join(", ");
       } else {
         noteDisplay.textContent = "（未対応）";
@@ -144,6 +168,37 @@
     scaleSelect.value = "メジャー";
     updateImage();
     updateNotes();
-  </script>
+  
+const scaleNotesMapMajorPenta = {
+  "C": ["C, D, E, G, A"],
+  "C#": ["C♯, D♯, F, G♯, A♯"],
+  "D": ["D, E, F♯, A, B"],
+  "D#": ["D♯, F, G, A♯, C"],
+  "E": ["E, F♯, G♯, B, C♯"],
+  "F": ["F, G, A, C, D"],
+  "F#": ["F♯, G♯, A♯, C♯, D♯"],
+  "G": ["G, A, B, D, E"],
+  "G#": ["G♯, A♯, C, D♯, F"],
+  "A": ["A, B, C♯, E, F♯"],
+  "A#": ["A♯, C, D, F, G"],
+  "B": ["B, C♯, D♯, F♯, G♯"]
+};
+
+const scaleNotesMapMinorPenta = {
+  "C": ["C, D♯, F, G, A♯"],
+  "C#": ["C♯, E, F♯, G♯, B"],
+  "D": ["D, F, G, A, C"],
+  "D#": ["D♯, F♯, G♯, A♯, C♯"],
+  "E": ["E, G, A, B, D"],
+  "F": ["F, G♯, A♯, C, D♯"],
+  "F#": ["F♯, A, B, C♯, E"],
+  "G": ["G, A♯, C, D, F"],
+  "G#": ["G♯, B, C♯, D♯, F♯"],
+  "A": ["A, C, D, E, G"],
+  "A#": ["A♯, C♯, D♯, F, G♯"],
+  "B": ["B, D, E, F♯, A"]
+};
+
+</script>
 </body>
 </html>
