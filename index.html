@@ -101,9 +101,16 @@
 };
 
     function updateScales() {
+      const key = document.getElementById("key").value;
+      const genre = genreSelect.value;
+
       const selectedGenre = genreSelect.value;
       scaleSelect.innerHTML = "";
       scales[selectedGenre].forEach(scale => {
+      if (scale === "メジャー" || scale === "ナチュラル") {
+        scaleSelect.value = scale;
+      }
+
         const opt = document.createElement("option");
         opt.value = scale;
         opt.textContent = scale;
@@ -123,7 +130,7 @@
         noteDisplay.textContent = scaleNotesMapMajorPenta[key].join(", ");
         fretboardImg.src = `${filenameKey}_メジャー_fretboard.png`;
     } else if (genre === "major" && scale === "ペンタ") {
-        fretboardImg.src = `${filenameKey}_ペンタ_fretboard.png`;
+        fretboardImg.src = `${filenameKey}_Mペンタ_fretboard.png`;
         fretboardImg.src = `${filenameKey}_メジャー_fretboard.png`;
       } else if (genre === "minor" && scale === "ナチュラル") {
         noteDisplay.textContent = scaleNotesMapMinor[key].join(", ");
@@ -131,7 +138,7 @@
         noteDisplay.textContent = scaleNotesMapMinorPenta[key].join(", ");
         fretboardImg.src = `${filenameKey}_ナチュラル_fretboard.png`;
     } else if (genre === "minor" && scale === "ペンタ") {
-        fretboardImg.src = `${filenameKey}_ペンタ_fretboard.png`;
+        fretboardImg.src = `${filenameKey}_Mペンタ_fretboard.png`;
         fretboardImg.src = `${filenameKey}_ナチュラル_fretboard.png`;
       } else {
         fretboardImg.src = "";
@@ -149,7 +156,7 @@
         noteDisplay.textContent = scaleNotesMapMajorPenta[key].join(", ");
         fretboardImg.src = `${filenameKey}_メジャー_fretboard.png`;
     } else if (genre === "major" && scale === "ペンタ") {
-        fretboardImg.src = `${filenameKey}_ペンタ_fretboard.png`;
+        fretboardImg.src = `${filenameKey}_Mペンタ_fretboard.png`;
         noteDisplay.textContent = scaleNotesMapMajor[key].join(", ");
       } else if (genre === "minor" && scale === "ナチュラル") {
         noteDisplay.textContent = scaleNotesMapMinor[key].join(", ");
@@ -157,13 +164,14 @@
         noteDisplay.textContent = scaleNotesMapMinorPenta[key].join(", ");
         fretboardImg.src = `${filenameKey}_ナチュラル_fretboard.png`;
     } else if (genre === "minor" && scale === "ペンタ") {
-        fretboardImg.src = `${filenameKey}_ペンタ_fretboard.png`;
+        fretboardImg.src = `${filenameKey}_Mペンタ_fretboard.png`;
         noteDisplay.textContent = scaleNotesMapMinor[key].join(", ");
       } else {
         noteDisplay.textContent = "（未対応）";
       }
     }
 
+    genreSelect.value = "major";
     updateScales();
     scaleSelect.value = "メジャー";
     updateImage();
