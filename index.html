@@ -67,21 +67,18 @@
   </div>
 
   <script>
-    /* --------- スケール定義 --------- */
     const scales = {
       major: ["メジャー", "ペンタ", "ブルース"],
       minor: ["ナチュラル", "メロディック", "ハーモニック", "ペンタ", "ブルース"],
       mode:  ["アイオニアン", "ドリアン", "フリジアン", "リディアン", "ミクソリディアン", "エオリアン", "ロクリアン"]
     };
 
-    /* --------- ファイル名用キー変換 --------- */
     const filenameKeyMap = {
       "C": "c", "C#": "c_sharp", "D": "d", "D#": "d_sharp", "E": "e",
       "F": "f", "F#": "f_sharp", "G": "g", "G#": "g_sharp", "A": "a",
       "A#": "a_sharp", "B": "b"
     };
 
-    /* --------- 構成音マップ --------- */
     const scaleNotesMapMajor = {
   "C": ["C, D, E, F, G, A, B"],
   "C#": ["C♯, D♯, F, F♯, G♯, A♯, C"],
@@ -145,98 +142,77 @@
     const fretboardImg = document.getElementById("fretboard");
     const noteDisplay  = document.getElementById("noteDisplay");
 
-    /* --------- スケール選択肢を更新 --------- */
-    
     function updateScales() {
       const genre = genreSelect.value;
       scaleSelect.innerHTML = "";
-      scales[genre].forEach(sc => {
-        const o = document.createElement("option");
-        o.value = sc;
-        o.textContent = sc;
-        scaleSelect.appendChild(o);
-      });
-      // デフォルト設定（ちゃんと1つ目の要素を選択）
-      scaleSelect.selectedIndex = 0;
+      if (scales[genre]) {
+        scales[genre].forEach(scale => {
+          const opt = document.createElement("option");
+          opt.value = scale;
+          opt.textContent = scale;
+          scaleSelect.appendChild(opt);
+        });
+        scaleSelect.selectedIndex = 0;
+      }
+      updateImage();
+      updateNotes();
     }
 
-      const genre = genreSelect.value;
-      scaleSelect.innerHTML = "";
-      scales[genre].forEach(sc => {
-        const o = document.createElement("option");
-        o.value = sc;
-        o.textContent = sc;
-        scaleSelect.appendChild(o);
-      });
-      // デフォルト設定
-      if (genre === "major") scaleSelect.value = "メジャー";
-      else if (genre === "minor") scaleSelect.value = "ナチュラル";
-      else if (genre === "mode") scaleSelect.value = "アイオニアン";
-    }
-
-    /* --------- 画像を切り替え --------- */
-    
     function updateImage() {
-      const key   = keySelect.value;
+      const key = keySelect.value;
       const genre = genreSelect.value;
       const scale = scaleSelect.value;
-      const fk    = filenameKeyMap[key];
-
+      const fk = filenameKeyMap[key];
       let fname = "";
+
       if (genre === "major") {
         if      (scale === "メジャー") fname = `${fk}_メジャー_fretboard.png`;
         else if (scale === "ペンタ")   fname = `${fk}_Mペンタ_fretboard.png`;
         else if (scale === "ブルース") fname = `${fk}_Mブルース_fretboard.png`;
       } else if (genre === "minor") {
-        if      (scale === "ナチュラル") fname = `${fk}_ナチュラル_fretboard.png`;
+        if      (scale === "ナチュラル")   fname = `${fk}_ナチュラル_fretboard.png`;
         else if (scale === "ハーモニック") fname = `${fk}_ハーモニック_fretboard.png`;
         else if (scale === "メロディック") fname = `${fk}_メロディック_fretboard.png`;
-        else if (scale === "ペンタ")     fname = `${fk}_mペンタ_fretboard.png`;
-        else if (scale === "ブルース")   fname = `${fk}_mブルース_fretboard.png`;
+        else if (scale === "ペンタ")       fname = `${fk}_mペンタ_fretboard.png`;
+        else if (scale === "ブルース")     fname = `${fk}_mブルース_fretboard.png`;
       } else if (genre === "mode") {
         fname = `${fk}_${scale}_fretboard.png`;
       }
-      fretboardImg.src = fname;
-    }
 
-      const key   = keySelect.value;
-      const genre = genreSelect.value;
-      const scale = scaleSelect.value;
-      const fk    = filenameKeyMap[key];
-
-      let fname = "";
-      if (genre === "major") {
-        if      (scale === "メジャー") fname = `${fk}_メジャー_fretboard.png`;
-        else if (scale === "ペンタ")   fname = `${fk}_Mペンタ_fretboard.png`;
-      } else if (genre === "minor") {
-        if      (scale === "ナチュラル") fname = `${fk}_ナチュラル_fretboard.png`;
-        else if (scale === "ペンタ")     fname = `${fk}_mペンタ_fretboard.png`;
-      }
-      // その他のスケールは未対応画像
       fretboardImg.src = fname || "";
     }
 
-    /* --------- 構成音を切り替え --------- */
     function updateNotes() {
-      const key   = keySelect.value;
+      const key = keySelect.value;
       const genre = genreSelect.value;
       const scale = scaleSelect.value;
-
       let notesArr = [];
+
       if (genre === "major") {
-        if      (scale === "メジャー") notesArr = scaleNotesMapMajor[key];
-        else if (scale === "ペンタ")   notesArr = scaleNotesMapMajorPenta[key];
+        if (scale === "メジャー") notesArr = scaleNotesMapMajor[key];
+        else if (scale === "ペンタ") notesArr = scaleNotesMapMajorPenta[key];
       } else if (genre === "minor") {
-        if      (scale === "ナチュラル") notesArr = scaleNotesMapMinor[key];
-        else if (scale === "ペンタ")     notesArr = scaleNotesMapMinorPenta[key];
+        if (scale === "ナチュラル") notesArr = scaleNotesMapMinor[key];
+        else if (scale === "ペンタ") notesArr = scaleNotesMapMinorPenta[key];
       }
+
       noteDisplay.textContent = notesArr.length ? notesArr.join(", ") : "（未対応）";
     }
 
-    /* --------- 初期化 --------- */
+    keySelect.addEventListener("change", () => {
+      updateImage();
+      updateNotes();
+    });
+    genreSelect.addEventListener("change", () => {
+      updateScales();
+    });
+    scaleSelect.addEventListener("change", () => {
+      updateImage();
+      updateNotes();
+    });
+
+    // 初期化
     updateScales();
-    updateImage();
-    updateNotes();
-  </script>
+</script>
 </body>
 </html>
