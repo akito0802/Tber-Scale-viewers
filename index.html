@@ -118,7 +118,28 @@
       });
     }
 
+    
     function updateImage() {
+      const key = document.getElementById("key").value;
+      const scale = scaleSelect.value;
+      const genre = genreSelect.value;
+      const filenameKey = filenameKeyMap[key];
+
+      let filename = "";
+      if (genre === "major" && scale === "メジャー") {
+        filename = `${filenameKey}_メジャー_fretboard.png`;
+      } else if (genre === "major" && scale === "ペンタ") {
+        filename = `${filenameKey}_Mペンタ_fretboard.png`;
+      } else if (genre === "minor" && scale === "ナチュラル") {
+        filename = `${filenameKey}_ナチュラル_fretboard.png`;
+      } else if (genre === "minor" && scale === "ペンタ") {
+        filename = `${filenameKey}_mペンタ_fretboard.png`;
+      } else {
+        filename = "";
+      }
+      fretboardImg.src = filename;
+    }
+
       const key = document.getElementById("key").value;
       const scale = scaleSelect.value;
       const genre = genreSelect.value;
