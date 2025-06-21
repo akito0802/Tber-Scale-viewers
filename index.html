@@ -146,7 +146,20 @@
     const noteDisplay  = document.getElementById("noteDisplay");
 
     /* --------- スケール選択肢を更新 --------- */
+    
     function updateScales() {
+      const genre = genreSelect.value;
+      scaleSelect.innerHTML = "";
+      scales[genre].forEach(sc => {
+        const o = document.createElement("option");
+        o.value = sc;
+        o.textContent = sc;
+        scaleSelect.appendChild(o);
+      });
+      // デフォルト設定（ちゃんと1つ目の要素を選択）
+      scaleSelect.selectedIndex = 0;
+    }
+
       const genre = genreSelect.value;
       scaleSelect.innerHTML = "";
       scales[genre].forEach(sc => {
